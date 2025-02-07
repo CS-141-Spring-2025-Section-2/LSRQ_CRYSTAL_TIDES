@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -10,44 +11,46 @@ import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity{
-
+	////////////////////////////////////////////////////////////
 	public String currentArea;
+	public int areaNumber;
 	public int potionCounter;
 	public int luminiteCounter;
 	
 	GamePanel gp;
 	KeyHandler keyH;
-	
+	////////////////////////////////////////////////////////////
 	public Player(GamePanel gp, KeyHandler keyH) {
-		
 		this.gp = gp;
 		this.keyH = keyH;
 		
+		solidArea = new Rectangle();
+		solidArea.x = 8;
+		solidArea.y = 16;
+		solidArea.width = 32;
+		solidArea.height = 32;
+		
 		setDefaultValues();
 		getPlayerImage();
-		
 	}
-	
+	////////////////////////////////////////////////////////////
 	public void setDefaultValues() {
-		
-		currentArea = "Town";
+		currentArea = "town";
+		areaNumber = 1;
 		potionCounter = 0;
 		luminiteCounter = 0;
 		
 		hp = 100;
-		mp = 100;
+		statPower = 5;
 		
-		x = 100;
-		y = 100;
+		x = 300;
+		y = 450;
 		speed = 4;
 		direction = "down";
-		
 	}
-	
+	////////////////////////////////////////////////////////////
 	public void getPlayerImage() {
-		
 		try {
-			
 			up1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-walk01.png"));
 			up2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-walk02.png"));
 			down1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcFront-walk01.png"));
@@ -65,16 +68,13 @@ public class Player extends Entity{
 			idle_left2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideL-idle02.png"));
 			idle_right1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-idle01.png"));
 			idle_right2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-idle02.png"));
-
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
+	////////////////////////////////////////////////////////////
 	public void update() {
-		
 		if(keyH.upPressed == true) {
 			direction = "up";
 			y -= speed;
@@ -95,10 +95,12 @@ public class Player extends Entity{
 			x += speed;
 		}
 		
+		collisionOn = false;
+		gp.CollisionC.checkTile(this);
+		
 		spriteCounter++;
 		
 		if(spriteCounter > 12) {
-			
 			if(spriteNumber == 1) {
 				spriteNumber = 2;
 			}
@@ -108,19 +110,14 @@ public class Player extends Entity{
 			}
 			
 			spriteCounter = 0;
-			
 		}
-		
 	}
-	
+	////////////////////////////////////////////////////////////
 	public void draw(Graphics2D g2) {
-		
 		BufferedImage image = null;
 		
 		if(keyH.isKeyPressed == false) {
-			
 			switch(direction) {
-			
 			case "up":
 				if(spriteNumber == 1) {
 					image = idle_up1;
@@ -160,15 +157,11 @@ public class Player extends Entity{
 					image = idle_right2;
 				}
 				break;
-				
 			}
-			
 		}
 		
 		if(keyH.isKeyPressed == true) {
-			
 			switch(direction) {
-			
 			case "up":
 				if(spriteNumber == 1) {
 					image = up1;
@@ -208,14 +201,10 @@ public class Player extends Entity{
 					image = right2;
 				}
 				break;
-				
 			}
-			
 		}
 		
-		
 		g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
-		
 	}
-	
+	////////////////////////////////////////////////////////////
 }
