@@ -11,63 +11,53 @@ import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity{
-	////////////////////////////////////////////////////////////
-	public String currentArea;
-	public int areaNumber;
-	public int potionCounter;
-	public int luminiteCounter;
-	
+	////////////////////////////////////////////////////////////	
 	GamePanel gp;
 	KeyHandler keyH;
+	
+	public String currentArea;
+	public int currentSubArea;
 	////////////////////////////////////////////////////////////
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
 		this.keyH = keyH;
-		
-		solidArea = new Rectangle();
-		solidArea.x = 8;
-		solidArea.y = 16;
-		solidArea.width = 32;
-		solidArea.height = 32;
 		
 		setDefaultValues();
 		getPlayerImage();
 	}
 	////////////////////////////////////////////////////////////
 	public void setDefaultValues() {
-		currentArea = "town";
-		areaNumber = 1;
-		potionCounter = 0;
-		luminiteCounter = 0;
-		
 		hp = 100;
 		statPower = 5;
 		
-		x = 300;
-		y = 450;
+		currentArea = "town";
+		currentSubArea = 1;
+		
+		x = 336;
+		y = 384;
 		speed = 4;
 		direction = "down";
 	}
 	////////////////////////////////////////////////////////////
 	public void getPlayerImage() {
 		try {
-			up1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-walk01.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-walk02.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcFront-walk01.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcFront-walk02.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideL-walk01.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideL-walk02.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-walk01.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-walk02.png"));
+			up1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightBack-walk1.png"));
+			up2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightBack-walk2.png"));
+			down1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightFront-walk1.png"));
+			down2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightFront-walk2.png"));
+			left1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideL-walk1.png"));
+			left2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideL-walk2.png"));
+			right1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideR-walk1.png"));
+			right2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideR-walk2.png"));
 			
-			idle_up1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-idle01.png"));
-			idle_up2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcBack-idle02.png"));
-			idle_down1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcFront-idle01.png"));
-			idle_down2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcFront-idle02.png"));
-			idle_left1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideL-idle01.png"));
-			idle_left2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideL-idle02.png"));
-			idle_right1 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-idle01.png"));
-			idle_right2 = ImageIO.read(getClass().getResourceAsStream("/npc/npcSideR-idle02.png"));
+			idle_up1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightBack-idle1.png"));
+			idle_up2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightBack-idle2.png"));
+			idle_down1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightFront-idle1.png"));
+			idle_down2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightFront-idle2.png"));
+			idle_left1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideL-idle1.png"));
+			idle_left2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideL-idle2.png"));
+			idle_right1 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideR-idle1.png"));
+			idle_right2 = ImageIO.read(getClass().getResourceAsStream("/knight/knightSideR-idle2.png"));
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -94,9 +84,6 @@ public class Player extends Entity{
 			direction = "right";
 			x += speed;
 		}
-		
-		collisionOn = false;
-		gp.CollisionC.checkTile(this);
 		
 		spriteCounter++;
 		
@@ -204,7 +191,7 @@ public class Player extends Entity{
 			}
 		}
 		
-		g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, x, y, 48, 96, null);
 	}
 	////////////////////////////////////////////////////////////
 }
