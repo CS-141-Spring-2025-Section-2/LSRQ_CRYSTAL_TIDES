@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,77 +9,213 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import entity.Player;
+import main.GamePanel;
+import main.KeyHandler;
 
 public class GUI {
 	////////////////////////////////////////////////////////////
+	GamePanel gp;
+	KeyHandler keyH;
 	Player player;
 	
-	public BufferedImage image1, image2;
-	public String guiPath;
-	public String mapPath;
+	private BufferedImage title, hud, map, option, area;
+	private BufferedImage healthFull, healthHalf, healthEmpty;
+	private String titlePath, hudPath, mapPath, areaPath;
+	private String itemFormat, luminiteFormat;
+	private int itemNumber, luminiteNumber;
+	private int itemLength, luminiteLength;
+	private int optionState;
 	
-	public int gameState;
-	public int titleState = 1;
-	public int playState = 2;
-	public int menuState = 3;
-	public int pauseState = 4;
 	////////////////////////////////////////////////////////////
-	public GUI(Player player) {
+	public GUI(GamePanel gp, KeyHandler keyH, Player player) {
+		this.gp = gp;
+		this.keyH = keyH;
 		this.player = player;
 		
 		setDefaultValues();
 	}
 	////////////////////////////////////////////////////////////
 	public void setDefaultValues() {
-		gameState = 2;
+		gp.gameState = 1;
+		optionState = 1;
+		
+		itemNumber = 2;
+		luminiteNumber = 6;
 	}
 	////////////////////////////////////////////////////////////
-	public void getGUIImage(String imagePath) {
+	public void getGUIImage() {			
 		try {
-			image1 = ImageIO.read(getClass().getResourceAsStream(imagePath));
+			title = ImageIO.read(getClass().getResourceAsStream(titlePath));
+			hud = ImageIO.read(getClass().getResourceAsStream(hudPath));
+			map = ImageIO.read(getClass().getResourceAsStream(mapPath));
+			area = ImageIO.read(getClass().getResourceAsStream(areaPath));
+			
+			healthFull = ImageIO.read(getClass().getResourceAsStream("/health/healthFull.png"));
+			healthHalf = ImageIO.read(getClass().getResourceAsStream("/health/healthHalf.png"));
+			healthEmpty = ImageIO.read(getClass().getResourceAsStream("/health/healthEmpty.png"));
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	////////////////////////////////////////////////////////////
-	public void getMapImage(String imagePath) {
-		try {
-			image2 = ImageIO.read(getClass().getResourceAsStream(imagePath));
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	////////////////////////////////////////////////////////////
-	public void getMapPath(Player player) {
+	public void getGUIPath() {
+		titlePath = "/title/title.png";
+		hudPath = "/hud/game-hud.png";
 		mapPath = "/map/map-" + player.currentArea + player.currentSubArea + ".png";
+		areaPath = "/area/" + player.currentArea + ".png";
+	}
+	////////////////////////////////////////////////////////////
+	public void getOptionPath() {
+		try {
+			switch(optionState) {
+			case 1: option = ImageIO.read(getClass().getResourceAsStream("/title/startSelect.png")); break;
+			case 2: option = ImageIO.read(getClass().getResourceAsStream("/title/continueSelect.png")); break;
+			case 3: option = ImageIO.read(getClass().getResourceAsStream("/title/exitSelect.png")); break;
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	////////////////////////////////////////////////////////////
+	public void drawHealth(Graphics2D g2) {
+		if(player.hp <= 100 && player.hp > 80) {
+			g2.drawImage(healthFull, 240, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 288, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 336, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 384, 672, gp.tileSize, gp.tileSize, null);
+			
+			if(player.hp <= 90) {
+				g2.drawImage(healthHalf, 432, 672, gp.tileSize, gp.tileSize, null);
+			} else {
+				g2.drawImage(healthFull, 432, 672, gp.tileSize, gp.tileSize, null);
+			}
+		}
+		
+		if(player.hp <= 80 && player.hp > 60) {
+			g2.drawImage(healthFull, 240, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 288, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 336, 672, gp.tileSize, gp.tileSize, null);
+			
+			if(player.hp <= 70) {
+				g2.drawImage(healthHalf, 384, 672, gp.tileSize, gp.tileSize, null);
+			} else {
+				g2.drawImage(healthFull, 384, 672, gp.tileSize, gp.tileSize, null);
+			}
+			
+			g2.drawImage(healthEmpty, 432, 672, gp.tileSize, gp.tileSize, null);
+		}
+		
+		if(player.hp <= 60 && player.hp > 40) {
+			g2.drawImage(healthFull, 240, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthFull, 288, 672, gp.tileSize, gp.tileSize, null);
+			
+			if(player.hp <= 50) {
+				g2.drawImage(healthHalf, 336, 672, gp.tileSize, gp.tileSize, null);
+			} else {
+				g2.drawImage(healthFull, 336, 672, gp.tileSize, gp.tileSize, null);
+			}
+			
+			g2.drawImage(healthEmpty, 384, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 432, 672, gp.tileSize, gp.tileSize, null);
+		}
+		
+		if(player.hp <= 40 && player.hp > 20) {
+			g2.drawImage(healthFull, 240, 672, gp.tileSize, gp.tileSize, null);
+			
+			if(player.hp <= 30) {
+				g2.drawImage(healthHalf, 288, 672, gp.tileSize, gp.tileSize, null);
+			} else {
+				g2.drawImage(healthFull, 288, 672, gp.tileSize, gp.tileSize, null);
+			}
+			
+			g2.drawImage(healthEmpty, 336, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 384, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 432, 672, gp.tileSize, gp.tileSize, null);
+		}
+		
+		if(player.hp <= 20 && player.hp > 0) {
+			if(player.hp <= 10) {
+				g2.drawImage(healthHalf, 240, 672, gp.tileSize, gp.tileSize, null);
+			} else {
+				g2.drawImage(healthFull, 240, 672, gp.tileSize, gp.tileSize, null);
+			}
+
+			g2.drawImage(healthEmpty, 288, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 336, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 384, 672, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(healthEmpty, 432, 672, gp.tileSize, gp.tileSize, null);
+		}
+	}
+	////////////////////////////////////////////////////////////
+	public void drawNumbers(Graphics2D g2) {
+		itemFormat = "";
+		luminiteFormat = "";
+		itemLength = String.valueOf(player.itemAmount).length();
+		luminiteLength = String.valueOf(player.luminiteAmount).length();
+		
+		for(int i = 0; i < itemNumber - itemLength; i++) {
+			itemFormat += "0";
+		}
+		itemFormat += player.itemAmount;
+				
+		for(int i = 0; i < luminiteNumber - luminiteLength; i++) {
+			luminiteFormat += "0";
+		}
+		luminiteFormat += player.luminiteAmount;
+		
+		g2.setFont(new Font("Alkhemikal", Font.PLAIN, 48)); 
+		g2.setColor(Color.white);
+		
+		g2.drawString(itemFormat, 615, 708);
+		g2.drawString(luminiteFormat, 732, 708);
+	}
+	////////////////////////////////////////////////////////////
+	public void update() {
+		getGUIPath();
+		getGUIImage();
+		
+		if(gp.gameState == gp.titleState) {
+			getOptionPath();
+			
+			if(keyH.upPressed == true && optionState > 1 ) {
+				optionState--;
+			}
+			
+			if(keyH.downPressed == true && optionState < 3) {
+				optionState++;
+			}
+			
+			if(keyH.enterPressed == true) {
+				switch(optionState) {
+				case 1: gp.gameState = 2; break;
+				case 2: gp.gameState = 2; break; //save logic goes here
+				case 3: gp.gameState = 0; break; //exits game
+				}
+			}
+		}
 	}
 	////////////////////////////////////////////////////////////
 	public void draw(Graphics2D g2) {
-		if(gameState == titleState) {
-			guiPath = "/title/title.png";
-			getGUIImage(guiPath);
-
-			g2.drawImage(image1, 0, 0, 960, 720, null);
+		if(gp.gameState == gp.titleState) {
+			g2.drawImage(title, 0, 0, 960, 720, null);
+			g2.drawImage(option, 0, 0, 960, 720, null);
 		}
 		
-		if(gameState == playState) {
-			guiPath = "/hud/game-hud.png";
-			getMapPath(player);
-			
-			getGUIImage(guiPath);
-			getMapImage(mapPath);
-			
-			g2.drawImage(image1, 0, 0, 960, 720, null);
-			g2.drawImage(image2, 0, 0, 960, 720, null);
+		if(gp.gameState == gp.playState) {
+			g2.drawImage(hud, 0, 0, 960, 720, null);
+			g2.drawImage(map, 0, 0, 960, 720, null);
+			g2.drawImage(area, 0, 0, 960, 720, null);
+			drawHealth(g2);
+			drawNumbers(g2);
 		}
 		
-		if(gameState == menuState) {
+		if(gp.gameState == gp.menuState) {
 			//menu logic goes here
 			//basically your party, status, inventory, settings, and exit
 		}
-		if(gameState == pauseState) {
+		if(gp.gameState == gp.pauseState) {
 			//pause logic goes here
 			//reserved for events that do not require player input
 		}

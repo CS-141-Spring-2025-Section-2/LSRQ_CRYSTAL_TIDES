@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -15,8 +16,11 @@ public class Player extends Entity{
 	GamePanel gp;
 	KeyHandler keyH;
 	
+	private BufferedImage playerImage;
 	public String currentArea;
 	public int currentSubArea;
+	public int itemAmount;
+	public int luminiteAmount;
 	////////////////////////////////////////////////////////////
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
@@ -32,11 +36,18 @@ public class Player extends Entity{
 		
 		currentArea = "town";
 		currentSubArea = 1;
+		itemAmount = 0;
+		luminiteAmount = 0;
 		
-		x = 336;
-		y = 384;
+		x = 7 * gp.tileSize;
+		y = 8 * gp.tileSize;
 		speed = 4;
 		direction = "down";
+		
+		hitBox.x = x;
+		hitBox.y = y + gp.tileSize;
+		hitBox.width = gp.tileSize;
+		hitBox.height = gp.tileSize;
 	}
 	////////////////////////////////////////////////////////////
 	public void getPlayerImage() {
@@ -98,100 +109,103 @@ public class Player extends Entity{
 			
 			spriteCounter = 0;
 		}
+		
+		hitBox.x = x;
+		hitBox.y = y + gp.tileSize;
 	}
 	////////////////////////////////////////////////////////////
-	public void draw(Graphics2D g2) {
-		BufferedImage image = null;
-		
-		if(keyH.isKeyPressed == false) {
+	public void draw(Graphics2D g2) {		
+		if(keyH.upPressed == false || keyH.downPressed == false || keyH.leftPressed == false || keyH.rightPressed == false) {
 			switch(direction) {
 			case "up":
 				if(spriteNumber == 1) {
-					image = idle_up1;
+					playerImage = idle_up1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = idle_up2;
+					playerImage = idle_up2;
 				}
 				break;
 				
 			case "down":
 				if(spriteNumber == 1) {
-					image = idle_down1;
+					playerImage = idle_down1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = idle_down2;
+					playerImage = idle_down2;
 				}
 				break;
 				
 			case "left":
 				if(spriteNumber == 1) {
-					image = idle_left1;
+					playerImage = idle_left1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = idle_left2;
+					playerImage = idle_left2;
 				}
 				break;
 				
 			case "right":
 				if(spriteNumber == 1) {
-					image = idle_right1;
+					playerImage = idle_right1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = idle_right2;
+					playerImage = idle_right2;
 				}
 				break;
 			}
 		}
 		
-		if(keyH.isKeyPressed == true) {
+		if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
 			switch(direction) {
 			case "up":
 				if(spriteNumber == 1) {
-					image = up1;
+					playerImage = up1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = up2;
+					playerImage = up2;
 				}
 				break;
 				
 			case "down":
 				if(spriteNumber == 1) {
-					image = down1;
+					playerImage = down1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = down2;
+					playerImage = down2;
 				}
 				break;
 				
 			case "left":
 				if(spriteNumber == 1) {
-					image = left1;
+					playerImage = left1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = left2;
+					playerImage = left2;
 				}
 				break;
 				
 			case "right":
 				if(spriteNumber == 1) {
-					image = right1;
+					playerImage = right1;
 				}
 				
 				if(spriteNumber == 2) {
-					image = right2;
+					playerImage = right2;
 				}
 				break;
 			}
 		}
 		
-		g2.drawImage(image, x, y, 48, 96, null);
+		g2.drawImage(playerImage, x, y, 48, 96, null);
+		g2.setColor(Color.pink);
+		g2.draw(hitBox);
 	}
 	////////////////////////////////////////////////////////////
 }
