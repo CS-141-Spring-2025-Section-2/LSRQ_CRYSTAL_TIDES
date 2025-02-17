@@ -11,14 +11,16 @@ import javax.imageio.ImageIO;
 import entity.Player;
 import main.GamePanel;
 import main.KeyHandler;
+import maps.Map;
 
 public class GUI {
 	////////////////////////////////////////////////////////////
 	GamePanel gp;
 	KeyHandler keyH;
 	Player player;
+	Map map;
 	
-	private BufferedImage title, hud, map, option, area;
+	private BufferedImage titleImg, hudImg, mapImg, optionImg, areaImg;
 	private BufferedImage healthFull, healthHalf, healthEmpty;
 	private String titlePath, hudPath, mapPath, areaPath;
 	private String itemFormat, luminiteFormat;
@@ -27,10 +29,11 @@ public class GUI {
 	private int optionState;
 	
 	////////////////////////////////////////////////////////////
-	public GUI(GamePanel gp, KeyHandler keyH, Player player) {
+	public GUI(GamePanel gp, KeyHandler keyH, Player player, Map map) {
 		this.gp = gp;
 		this.keyH = keyH;
 		this.player = player;
+		this.map = map;
 		
 		setDefaultValues();
 	}
@@ -45,10 +48,10 @@ public class GUI {
 	////////////////////////////////////////////////////////////
 	public void getGUIImage() {			
 		try {
-			title = ImageIO.read(getClass().getResourceAsStream(titlePath));
-			hud = ImageIO.read(getClass().getResourceAsStream(hudPath));
-			map = ImageIO.read(getClass().getResourceAsStream(mapPath));
-			area = ImageIO.read(getClass().getResourceAsStream(areaPath));
+			titleImg = ImageIO.read(getClass().getResourceAsStream(titlePath));
+			hudImg = ImageIO.read(getClass().getResourceAsStream(hudPath));
+			mapImg = ImageIO.read(getClass().getResourceAsStream(mapPath));
+			areaImg = ImageIO.read(getClass().getResourceAsStream(areaPath));
 			
 			healthFull = ImageIO.read(getClass().getResourceAsStream("/health/healthFull.png"));
 			healthHalf = ImageIO.read(getClass().getResourceAsStream("/health/healthHalf.png"));
@@ -62,16 +65,16 @@ public class GUI {
 	public void getGUIPath() {
 		titlePath = "/title/title.png";
 		hudPath = "/hud/game-hud.png";
-		mapPath = "/map/map-" + player.currentArea + player.currentSubArea + ".png";
-		areaPath = "/area/" + player.currentArea + ".png";
+		mapPath = "/map/map-" + map.currentArea + map.currentSubArea + ".png";
+		areaPath = "/area/" + map.currentArea + ".png";
 	}
 	////////////////////////////////////////////////////////////
 	public void getOptionPath() {
 		try {
 			switch(optionState) {
-			case 1: option = ImageIO.read(getClass().getResourceAsStream("/title/startSelect.png")); break;
-			case 2: option = ImageIO.read(getClass().getResourceAsStream("/title/continueSelect.png")); break;
-			case 3: option = ImageIO.read(getClass().getResourceAsStream("/title/exitSelect.png")); break;
+			case 1: optionImg = ImageIO.read(getClass().getResourceAsStream("/title/startSelect.png")); break;
+			case 2: optionImg = ImageIO.read(getClass().getResourceAsStream("/title/continueSelect.png")); break;
+			case 3: optionImg = ImageIO.read(getClass().getResourceAsStream("/title/exitSelect.png")); break;
 			}
 		}
 		catch(IOException e) {
@@ -199,14 +202,14 @@ public class GUI {
 	////////////////////////////////////////////////////////////
 	public void draw(Graphics2D g2) {
 		if(gp.gameState == gp.titleState) {
-			g2.drawImage(title, 0, 0, 960, 720, null);
-			g2.drawImage(option, 0, 0, 960, 720, null);
+			g2.drawImage(titleImg, 0, 0, 960, 720, null);
+			g2.drawImage(optionImg, 0, 0, 960, 720, null);
 		}
 		
 		if(gp.gameState == gp.playState) {
-			g2.drawImage(hud, 0, 0, 960, 720, null);
-			g2.drawImage(map, 0, 0, 960, 720, null);
-			g2.drawImage(area, 0, 0, 960, 720, null);
+			g2.drawImage(hudImg, 0, 0, 960, 720, null);
+			g2.drawImage(mapImg, 0, 0, 960, 720, null);
+			g2.drawImage(areaImg, 0, 0, 960, 720, null);
 			drawHealth(g2);
 			drawNumbers(g2);
 		}

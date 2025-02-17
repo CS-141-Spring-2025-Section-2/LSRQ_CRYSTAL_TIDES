@@ -2,7 +2,6 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -11,16 +10,21 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
 
-public class Player extends Entity{
+public class Player extends Entity {
 	////////////////////////////////////////////////////////////	
 	GamePanel gp;
 	KeyHandler keyH;
 	
 	private BufferedImage playerImage;
-	public String currentArea;
-	public int currentSubArea;
+	public String Area;
+	public int SubArea;
 	public int itemAmount;
 	public int luminiteAmount;
+	
+	public String worldPos;
+	public int worldX;
+	public int worldY;
+	public int offSet;
 	////////////////////////////////////////////////////////////
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
@@ -34,10 +38,10 @@ public class Player extends Entity{
 		hp = 100;
 		statPower = 5;
 		
-		currentArea = "town";
-		currentSubArea = 1;
+		Area = "town";
+		SubArea = 1;
 		itemAmount = 0;
-		luminiteAmount = 0;
+		luminiteAmount = 12124124;
 		
 		x = 7 * gp.tileSize;
 		y = 8 * gp.tileSize;

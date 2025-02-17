@@ -8,8 +8,9 @@ import javax.swing.JPanel;
 
 import GUI.GUI;
 import entity.Player;
+import maps.Map;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
 	////////////////////////////////////////////////////////////
 	//SCREEN RESOLUTION
 	final int originalTileSize = 16;
@@ -30,16 +31,19 @@ public class GamePanel extends JPanel implements Runnable{
 	public int playState = 2;
 	public int menuState = 3;
 	public int pauseState = 4;
+	public int battleState = 5;
 	////////////////////////////////////////////////////////////
 	Thread gameThread;
 		
 	KeyHandler keyH = new KeyHandler(this);
-	
-	CollisionChecker CollisionC = new CollisionChecker(this);
-				
+					
 	Player player = new Player(this, keyH);
 	
-	GUI gui = new GUI(this, keyH, player);
+	CollisionChecker CollisionC = new CollisionChecker(this);
+		
+	Map map = new Map(this, player);
+	
+	GUI gui = new GUI(this, keyH, player, map);
 	////////////////////////////////////////////////////////////
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -79,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		if(gameState == playState) {
 			gui.update();
+			map.update();
 			player.update();
 		}
 		
@@ -111,6 +116,10 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		if(gameState == pauseState) {
 			gui.draw(g2);
+		}
+		
+		if(gameState == battleState) {
+			
 		}
 		
 		g2.dispose();
