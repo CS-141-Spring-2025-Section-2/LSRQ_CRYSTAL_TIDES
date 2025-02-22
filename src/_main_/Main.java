@@ -1,6 +1,5 @@
-package main;
+package _main_;
 
-import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 public class Main {
@@ -11,7 +10,6 @@ public class Main {
 	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	window.setResizable(false);
 	window.setTitle("CRYSTAL TIDES");
-	window.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/icon/icon.png")));
 	
 	GamePanel gp = new GamePanel();
 	window.add(gp);

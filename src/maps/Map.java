@@ -1,7 +1,7 @@
 package maps;
 
+import _main_.GamePanel;
 import entity.Player;
-import main.GamePanel;
 
 public class Map { 
 	GamePanel gp;

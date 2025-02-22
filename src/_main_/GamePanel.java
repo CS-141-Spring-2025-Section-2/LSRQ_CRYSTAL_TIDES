@@ -1,4 +1,4 @@
-package main;
+package _main_;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -6,32 +6,37 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import GUI.GUI;
+import battle.Battle;
+import entity.Enemy;
 import entity.Player;
+import gui.GUI;
 import maps.Map;
 
 public class GamePanel extends JPanel implements Runnable {
 	////////////////////////////////////////////////////////////
 	//SCREEN RESOLUTION
-	final int originalTileSize = 16;
+	final int ORIGINAL_TILESIZE = 16;
 	final int scale = 3;
 	
-	public final int tileSize = originalTileSize * scale;
-	final int maxScreenCol = 20;
-	final int maxScreenRow = 15;
-	final int screenWidth = tileSize * maxScreenCol;
-	final int screenHeight = tileSize * maxScreenRow;
+	public final int TILESIZE = ORIGINAL_TILESIZE * scale;
+	final int SCREEN_COL = 20;
+	final int SCREEN_ROW = 15;
+	final int SCREEN_WIDTH = TILESIZE * SCREEN_COL;
+	final int SCREEN_HEIGHT = TILESIZE * SCREEN_ROW;
 	
 	//FRAMES PER SECOND
-	int FPS = 60;
+	final int FPS = 60;
 	
 	//GAME STATE
 	public int gameState = 1;
-	public int titleState = 1;
-	public int playState = 2;
-	public int menuState = 3;
-	public int pauseState = 4;
-	public int battleState = 5;
+	
+	public final int TITLE_STATE = 1;
+	public final int PLAY_STATE = 2;
+	public final int MENU_STATE = 3;
+	public final int SETTING_STATE = 4;
+	public final int BATTLE_STATE = 5;
+	public final int GAME_OVER_STATE = 6;
+	public final int ENDING_STATE = 7;
 	////////////////////////////////////////////////////////////
 	Thread gameThread;
 		
@@ -39,21 +44,23 @@ public class GamePanel extends JPanel implements Runnable {
 					
 	Player player = new Player(this, keyH);
 	
-	CollisionChecker CollisionC = new CollisionChecker(this);
-		
+	Enemy enemy = new Enemy();
+			
 	Map map = new Map(this, player);
-	
+		
 	GUI gui = new GUI(this, keyH, player, map);
+	
+	Battle battle = new Battle(this, keyH, gui, player, enemy);
 	////////////////////////////////////////////////////////////
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);
 	}
 	////////////////////////////////////////////////////////////
 	public void start() {
-		gameThread = new Thread(this); //pass GamePanel to Thread()
+		gameThread = new Thread(this);
 		gameThread.start();
 	}
 	////////////////////////////////////////////////////////////
@@ -77,21 +84,33 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	////////////////////////////////////////////////////////////
 	public void update() {
-		if(gameState == titleState) {
+		if(gameState == TITLE_STATE) {
 			gui.update();
 		}
 		
-		if(gameState == playState) {
+		if(gameState == PLAY_STATE) {
 			gui.update();
 			map.update();
 			player.update();
 		}
 		
-		if(gameState == menuState) {
+		if(gameState == MENU_STATE) {
 			gui.update();
 		}
 		
-		if(gameState == pauseState) {
+		if(gameState == SETTING_STATE) {
+			gui.update();
+		}
+		
+		if(gameState == BATTLE_STATE) {
+			gui.update();
+		}
+		
+		if(gameState == GAME_OVER_STATE) {
+			gui.update();
+		}
+		
+		if(gameState == ENDING_STATE) {
 			gui.update();
 		}
 	}
@@ -101,25 +120,33 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		Graphics2D g2 = (Graphics2D)g;
 				
-		if(gameState == titleState) {
+		if(gameState == TITLE_STATE) {
 			gui.draw(g2);
 		}
 		
-		if(gameState == playState) {
+		if(gameState == PLAY_STATE) {
 			gui.draw(g2);
 			player.draw(g2);
 		}
 		
-		if(gameState == menuState) {
+		if(gameState == MENU_STATE) {
 			gui.draw(g2);
 		}
 		
-		if(gameState == pauseState) {
+		if(gameState == SETTING_STATE) {
 			gui.draw(g2);
 		}
 		
-		if(gameState == battleState) {
-			
+		if(gameState == BATTLE_STATE) {
+			gui.draw(g2);
+		}
+		
+		if(gameState == GAME_OVER_STATE) {
+			gui.draw(g2);
+		}
+		
+		if(gameState == ENDING_STATE) {
+			gui.draw(g2);
 		}
 		
 		g2.dispose();

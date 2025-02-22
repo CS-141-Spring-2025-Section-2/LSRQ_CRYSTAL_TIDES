@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.GamePanel;
-import main.KeyHandler;
+import _main_.GamePanel;
+import _main_.KeyHandler;
 
 public class Player extends Entity {
 	////////////////////////////////////////////////////////////	
@@ -18,8 +18,10 @@ public class Player extends Entity {
 	private BufferedImage playerImage;
 	public String Area;
 	public int SubArea;
-	public int itemAmount;
+	public int potionAmount;
 	public int luminiteAmount;
+	
+	public int warriorHP, archerHP, wizardHP;
 	
 	public String worldPos;
 	public int worldX;
@@ -35,23 +37,25 @@ public class Player extends Entity {
 	}
 	////////////////////////////////////////////////////////////
 	public void setDefaultValues() {
-		hp = 100;
-		statPower = 5;
+		hp = 3;
+		warriorHP = 3;
+		archerHP = 3;
+		wizardHP = 3;
 		
 		Area = "town";
 		SubArea = 1;
-		itemAmount = 0;
-		luminiteAmount = 12124124;
+		potionAmount = 0;
+		luminiteAmount = 0;
 		
-		x = 7 * gp.tileSize;
-		y = 8 * gp.tileSize;
+		x = 7 * gp.TILESIZE;
+		y = 8 * gp.TILESIZE;
 		speed = 4;
 		direction = "down";
 		
 		hitBox.x = x;
-		hitBox.y = y + gp.tileSize;
-		hitBox.width = gp.tileSize;
-		hitBox.height = gp.tileSize;
+		hitBox.y = y + gp.TILESIZE;
+		hitBox.width = gp.TILESIZE;
+		hitBox.height = gp.TILESIZE;
 	}
 	////////////////////////////////////////////////////////////
 	public void getPlayerImage() {
@@ -115,7 +119,7 @@ public class Player extends Entity {
 		}
 		
 		hitBox.x = x;
-		hitBox.y = y + gp.tileSize;
+		hitBox.y = y + gp.TILESIZE;
 	}
 	////////////////////////////////////////////////////////////
 	public void draw(Graphics2D g2) {		

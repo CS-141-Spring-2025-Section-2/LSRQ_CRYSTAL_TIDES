@@ -5,8 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Entity {
 	////////////////////////////////////////////////////////////
-	public int hp; //health points : when hp reaches 0 -> player/enemy dies
-	public int statPower; //determines the damage of basic attacks, and skills
+	public int hp;
 	
 	public int x, y;
 	public int speed;
