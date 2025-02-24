@@ -522,7 +522,7 @@ public class GUI {
 				keyH.enterPressed = false;
 				soundM.playSoundEffect("res/audio/select.wav");
 				switch(optionState) {
-				case 1: gp.gameState = 2; soundM.changeMusic("res/audio/overworld.wav"); break; //returns to play state
+				case 1: player.setDefaultValues(); map.setDefaultValues(); soundM.changeMusic("res/audio/overworld.wav"); gp.gameState = 2; break; //returns to play state
 				case 2: gp.gameState = 0; break;
 				case 3: System.exit(0); break; //exits program
 				}

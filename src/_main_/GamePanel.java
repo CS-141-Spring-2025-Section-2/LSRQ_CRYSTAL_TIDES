@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	Map map = new Map(this, keyH, soundM, player, enemy);
 			
-	Battle battle = new Battle(this, keyH, soundM, player, enemy);
+	Battle battle = new Battle(this, keyH, soundM, player, enemy, map);
 	
 	GUI gui = new GUI(this, keyH, soundM, player, enemy, map, battle);
 	////////////////////////////////////////////////////////////

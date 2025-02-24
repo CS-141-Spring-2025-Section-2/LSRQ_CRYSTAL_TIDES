@@ -1,7 +1,5 @@
 package map;
 
-import java.awt.Graphics2D;
-
 import _main_.GamePanel;
 import _main_.KeyHandler;
 import _main_.SoundManager;

@@ -7,6 +7,7 @@ import _main_.KeyHandler;
 import _main_.SoundManager;
 import entity.Enemy;
 import entity.Player;
+import map.Map;
 
 public class Battle {
 	////////////////////////////////////////////////////////////
@@ -15,6 +16,7 @@ public class Battle {
 	SoundManager soundM;
 	Player player;
 	Enemy enemy;
+	Map map;
 		
 	private int enemyAmount;
 	private int enemyTarget;
@@ -31,12 +33,13 @@ public class Battle {
 	
 	Random random = new Random();
 	////////////////////////////////////////////////////////////
-	public Battle(GamePanel gp, KeyHandler keyH, SoundManager soundM, Player player, Enemy enemy) {
+	public Battle(GamePanel gp, KeyHandler keyH, SoundManager soundM, Player player, Enemy enemy, Map map) {
 		this.gp = gp;
 		this.keyH = keyH;
 		this.soundM = soundM;
 		this.player = player;
 		this.enemy = enemy;
+		this.map = map;
 		
 		setDefaultValues();
 	}
@@ -173,8 +176,13 @@ public class Battle {
 	////////////////////////////////////////////////////////////
 	public void checkBattle() {
 		if(isWarriorDead && isArcherDead && isWizardDead == true) {
+			setDefaultValues();
+			player.setDefaultValues();
+			map.setDefaultValues();
+			
 			if(player.hp >= 1) {
 				player.hp -= 1;
+				soundM.changeMusic("res/audio/overworld.wav");
 				gp.gameState = 2;
 			} else {
 				soundM.changeMusic("res/audio/gameover.wav");
