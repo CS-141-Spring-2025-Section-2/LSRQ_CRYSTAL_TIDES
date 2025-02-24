@@ -10,7 +10,7 @@ import battle.Battle;
 import entity.Enemy;
 import entity.Player;
 import gui.GUI;
-import maps.Map;
+import map.Map;
 
 public class GamePanel extends JPanel implements Runnable {
 	////////////////////////////////////////////////////////////
@@ -30,33 +30,37 @@ public class GamePanel extends JPanel implements Runnable {
 	//GAME STATE
 	public int gameState = 1;
 	
+	public final int TUTORIAL_STATE = 0;
 	public final int TITLE_STATE = 1;
 	public final int PLAY_STATE = 2;
-	public final int MENU_STATE = 3;
-	public final int SETTING_STATE = 4;
-	public final int BATTLE_STATE = 5;
-	public final int GAME_OVER_STATE = 6;
-	public final int ENDING_STATE = 7;
+	public final int BATTLE_STATE = 3;
+	public final int GAME_OVER_STATE = 4;
+	public final int ENDING_STATE = 5;
+	
 	////////////////////////////////////////////////////////////
 	Thread gameThread;
 		
 	KeyHandler keyH = new KeyHandler(this);
+
+	SoundManager soundM = new SoundManager();
 					
 	Player player = new Player(this, keyH);
 	
 	Enemy enemy = new Enemy();
-			
-	Map map = new Map(this, player);
-		
-	GUI gui = new GUI(this, keyH, player, map);
 	
-	Battle battle = new Battle(this, keyH, gui, player, enemy);
+	Map map = new Map(this, keyH, soundM, player, enemy);
+			
+	Battle battle = new Battle(this, keyH, soundM, player, enemy);
+	
+	GUI gui = new GUI(this, keyH, soundM, player, enemy, map, battle);
 	////////////////////////////////////////////////////////////
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);
+		
+		soundM.playMusic("res/audio/title.wav");
 	}
 	////////////////////////////////////////////////////////////
 	public void start() {
@@ -84,72 +88,85 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	////////////////////////////////////////////////////////////
 	public void update() {
+		////////////////////////////////////////////////////////////
+		//TUTORIAL STATE
+		if(gameState == TUTORIAL_STATE) {
+			gui.update();
+		}
+		////////////////////////////////////////////////////////////
+		//TITLE STATE
 		if(gameState == TITLE_STATE) {
 			gui.update();
 		}
-		
+		////////////////////////////////////////////////////////////
+		//PLAY STATE
 		if(gameState == PLAY_STATE) {
 			gui.update();
 			map.update();
 			player.update();
+			enemy.update();
 		}
-		
-		if(gameState == MENU_STATE) {
-			gui.update();
-		}
-		
-		if(gameState == SETTING_STATE) {
-			gui.update();
-		}
-		
+		////////////////////////////////////////////////////////////
+		//BATTLE STATE
 		if(gameState == BATTLE_STATE) {
 			gui.update();
 		}
-		
+		////////////////////////////////////////////////////////////
+		//GAMEOVER STATE
 		if(gameState == GAME_OVER_STATE) {
 			gui.update();
 		}
-		
+		////////////////////////////////////////////////////////////
+		//ENDING STATE
 		if(gameState == ENDING_STATE) {
 			gui.update();
 		}
+		////////////////////////////////////////////////////////////
 	}
 	////////////////////////////////////////////////////////////
 	public void paintComponent(Graphics g) {
+		////////////////////////////////////////////////////////////
 		super.paintComponent(g);
 		
 		Graphics2D g2 = (Graphics2D)g;
-				
+		////////////////////////////////////////////////////////////
+		//TUTORIAL STATE
+		if(gameState == TUTORIAL_STATE) {
+			gui.draw(g2);
+		}
+		////////////////////////////////////////////////////////////
+		//TITLE STATE
 		if(gameState == TITLE_STATE) {
 			gui.draw(g2);
 		}
-		
+		////////////////////////////////////////////////////////////
+		//PLAY STATE
 		if(gameState == PLAY_STATE) {
 			gui.draw(g2);
+			g2.drawImage(gui.mapUnderImg, 0, 0, 960, 720, null);
+			gui.drawEntityImage(g2);
 			player.draw(g2);
+			g2.drawImage(gui.mapUpperImg, 0, 0, 960, 720, null);
 		}
-		
-		if(gameState == MENU_STATE) {
-			gui.draw(g2);
-		}
-		
-		if(gameState == SETTING_STATE) {
-			gui.draw(g2);
-		}
-		
+		////////////////////////////////////////////////////////////
+		//BATTLE STATE
 		if(gameState == BATTLE_STATE) {
 			gui.draw(g2);
+			battle.startBattle(player.battleState);
 		}
-		
+		////////////////////////////////////////////////////////////
+		//GAME OVER STATE
 		if(gameState == GAME_OVER_STATE) {
 			gui.draw(g2);
 		}
-		
+		////////////////////////////////////////////////////////////
+		//ENDING STATE
 		if(gameState == ENDING_STATE) {
 			gui.draw(g2);
 		}
-		
+		////////////////////////////////////////////////////////////
 		g2.dispose();
+		////////////////////////////////////////////////////////////
 	}
 	////////////////////////////////////////////////////////////
 }
